@@ -40,6 +40,9 @@
         </div>
         <ul>
             <li><a href="#" id="infoBtn">Información</a></li>
+            <li><a href="#" id="miniBtn">Mini</a></li>
+            <li><a href="#" id="grandeBtn">Grande</a></li>
+            <li><a href="#" id="todasBtn">Todas</a></li>
         </ul>
     </div>
 
@@ -49,11 +52,11 @@
             <span class="info-close" id="infoClose">&times;</span>
             <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
 
-<p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
+            <p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
 
-<p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
+            <p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
 
-<p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
+            <p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
         </div>
     </div>
 
@@ -83,34 +86,41 @@
                 price: "$100.00 MXN",
                 description: "Mini piñata *Rene con la siguientes medidas(Alto 40cm x Ancho 25cm).",
                 image: "https://i.postimg.cc/wBpqmfqq/IMG-20250825-WA0005.png",
-                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
+                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
+                size: "mini"
             },
             {
                 name: "MOANA",
                 price: "$85.00 MXN",
                 description: "Mini piñata *Moana (Alto 37cm x Ancho 18cm).",
                 image: "https://i.postimg.cc/yN8ZR8YY/IMG-20250825-WA0006.png",
-                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
+                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
+                size: "mini"
             },
             {
                 name: "WOODY",
                 price: "$90.00 MXN",
                 description: "Mini piñata *Woody (Alto 42.05cm x Ancho 26cm).",
                 image: "https://i.postimg.cc/SRd4dYyg/IMG-20250825-WA0007.png",
-                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
+                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
+                size: "mini"
             },
             {
                 name: "FORZEN",
                 price: "$80.00 MXN",
-                description: "Mini piata *frozen (Alto 37cm x Ancho 20cm).",
+                description: "Mini piñata *frozen (Alto 37cm x Ancho 20cm).",
                 image: "https://i.postimg.cc/0j2F8WsC/IMG-20250825-WA0008.png",
-                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
+                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
+                size: "mini"
             }
         ];
 
+        // Variables globales
+        let swiper;
+        let currentFilter = 'all';
+
         // Función para extraer el valor numérico del precio
         function getPriceValue(priceString) {
-            // Eliminar el símbolo de moneda y cualquier texto, luego convertir a número
             return parseFloat(priceString.replace(/[^\d.]/g, ''));
         }
 
@@ -123,10 +133,22 @@
             return array;
         }
 
-        // Generar slides de forma aleatoria
-        function generateRandomSlides() {
+        // Función para filtrar piñatas por tamaño
+        function filterPinatasBySize(size) {
+            if (size === 'all') {
+                return [...pinatas];
+            }
+            return pinatas.filter(pinata => pinata.size === size);
+        }
+
+        // Generar slides basado en el filtro actual
+        function generateSlides() {
             const slidesContainer = document.getElementById('slides-container');
-            const shuffledPinatas = shuffleArray([...pinatas]); // Crear copia para no modificar el original
+            slidesContainer.innerHTML = '';
+            
+            // Filtrar piñatas según el filtro actual
+            const filteredPinatas = filterPinatasBySize(currentFilter);
+            const shuffledPinatas = shuffleArray([...filteredPinatas]);
             
             shuffledPinatas.forEach(pinata => {
                 const slide = document.createElement('div');
@@ -161,6 +183,35 @@
                 
                 slidesContainer.appendChild(slide);
             });
+            
+            // Reiniciar Swiper
+            if (swiper) {
+                swiper.destroy(true, true);
+            }
+            
+            initSwiper();
+        }
+
+        // Inicializar Swiper
+        function initSwiper() {
+            swiper = new Swiper(".myswiper", {
+                effect: "coverflow",
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: "auto",
+                loop: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                coverflowEffect: {
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows: true,
+                    rotate: 0,
+                    stretch: 0,
+                }
+            });
         }
 
         // Función para iniciar audio
@@ -187,6 +238,9 @@
             const menuItems = document.getElementById('menuItems');
             const closeMenu = document.getElementById('closeMenu');
             const infoBtn = document.getElementById('infoBtn');
+            const miniBtn = document.getElementById('miniBtn');
+            const grandeBtn = document.getElementById('grandeBtn');
+            const todasBtn = document.getElementById('todasBtn');
             const infoModal = document.getElementById('infoModal');
             const infoClose = document.getElementById('infoClose');
             
@@ -211,6 +265,36 @@
                 menuToggle.classList.remove('active');
                 infoModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
+            });
+            
+            // Filtrar por Mini
+            miniBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuItems.classList.remove('active');
+                menuToggle.classList.remove('active');
+                currentFilter = 'mini';
+                generateSlides();
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Filtrar por Grande
+            grandeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuItems.classList.remove('active');
+                menuToggle.classList.remove('active');
+                currentFilter = 'grande';
+                generateSlides();
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Mostrar todas
+            todasBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuItems.classList.remove('active');
+                menuToggle.classList.remove('active');
+                currentFilter = 'all';
+                generateSlides();
+                document.body.style.overflow = 'auto';
             });
             
             // Cerrar modal de información
@@ -250,28 +334,8 @@
             // Configurar menú
             setupMenu();
             
-            // Generar slides aleatorios
-            generateRandomSlides();
-            
-            // Inicializar Swiper después de generar los slides
-            var swiper = new Swiper(".myswiper", {
-                effect: "coverflow",
-                grabCursor: true,
-                centeredSlides: true,
-                slidesPerView: "auto",
-                loop: true,
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true,
-                },
-                coverflowEffect: {
-                    depth: 100,
-                    modifier: 1,
-                    slideShadows: true,
-                    rotate: 0,
-                    stretch: 0,
-                }
-            });
+            // Generar slides iniciales
+            generateSlides();
             
             // Agregar evento al botón de cerrar modal
             document.querySelector('.modal-close').addEventListener('click', closeModal);
