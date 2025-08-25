@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIÑATAS FIESTITA POP</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <p class="Title"></p>
+
+    <div class="swiper myswiper">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide">
+                <div class="icons">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    <img src="https://i.postimg.cc/fL6W0Vtd/pngwing-com-2.png" alt="Logo">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="product-content">
+                    <div class="product-txt">
+                        <span>$89.00 MXN</span>
+                        <h3>Jack Skellington</h3>
+                        <p>Mini piñata de picacho especial para fiestas infantiles.</p>
+                    </div>
+                    <div class="product-img">
+                        <img src="https://i.postimg.cc/VLnzrsFy/pngwing-com.png" alt="Piñata Jack Skellington">
+                    </div>
+                </div>
+                <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Jack Skellington', '$89.00 MXN', 'Mini piñata de picacho especial para fiestas infantiles.')">Comprar</a>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="swiper-slide">
+                <div class="icons">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    <img src="https://i.postimg.cc/fL6W0Vtd/pngwing-com-2.png" alt="Logo">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="product-content">
+                    <div class="product-txt">
+                        <span>$89.00 MXN</span>
+                        <h3>Piñata Especial</h3>
+                        <p>Una piñata única y realmente original para tus fiestas.</p>
+                    </div>
+                    <div class="product-img">
+                        <img src="https://i.postimg.cc/qqM09232/pngwing-com-1.png" alt="Otra piñata">
+                    </div>
+                </div>
+                <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="swiper-slide">
+                <div class="icons">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    <img src="https://i.postimg.cc/fL6W0Vtd/pngwing-com-2.png" alt="Logo">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="product-content">
+                    <div class="product-txt">
+                        <span>$89.00 MXN</span>
+                        <h3>Piñata Especial</h3>
+                        <p>Una piñata única y realmente original para tus fiestas.</p>
+                    </div>
+                    <div class="product-img">
+                        <img src="https://i.postimg.cc/qqM09232/pngwing-com-1.png" alt="Otra piñata">
+                    </div>
+                </div>
+                <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+            </div>
+
+            <!-- Slides adicionales con el mismo patrón -->
+            <div class="swiper-slide">
+                <div class="icons">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    <img src="https://i.postimg.cc/fL6W0Vtd/pngwing-com-2.png" alt="Logo">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="product-content">
+                    <div class="product-txt">
+                        <span>$89.00 MXN</span>
+                        <h3>Piñata Especial</h3>
+                        <p>Una piñata única y realmente original para tus fiestas.</p>
+                    </div>
+                    <div class="product-img">
+                        <img src="https://i.postimg.cc/qqM09232/pngwing-com-1.png" alt="Otra piñata">
+                    </div>
+                </div>
+                <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+            </div>
+
+            <div class="swiper-slide">
+                <div class="icons">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    <img src="https://i.postimg.cc/fL6W0Vtd/pngwing-com-2.png" alt="Logo">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="product-content">
+                    <div class="product-txt">
+                        <span>$89.00 MXN</span>
+                        <h3>Piñata Especial</h3>
+                        <p>Una piñata única y realmente original para tus fiestas.</p>
+                    </div>
+                    <div class="product-img">
+                        <img src="https://i.postimg.cc/qqM09232/pngwing-com-1.png" alt="Otra piñata">
+                    </div>
+                </div>
+                <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var swiper = new Swiper(".myswiper", {
+                effect: "coverflow",
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: "auto",
+                loop: true,
+                coverflowEffect: {
+                    depth: 100, // Reducido para móvil
+                    modifier: 1,
+                    slideShadows: true,
+                    rotate: 0,
+                    stretch: 0,
+                }
+            });
+        });
+
+        // Función para enviar mensaje por WhatsApp
+        function comprarPorWhatsapp(nombre, precio, descripcion) {
+            // Número de teléfono
+            const telefono = "524622002744";
+            
+            // Crear mensaje con la información del producto
+            const mensaje = `¡Hola! Estoy interesado en comprar la siguiente piñata:%0A%0A*Producto:* ${nombre}%0A*Precio:* ${precio}%0A*Descripción:* ${descripcion}%0A%0APor favor, necesito más información para completar mi compra.`;
+            
+            // Crear el enlace de WhatsApp
+            const url = `https://wa.me/${telefono}?text=${mensaje}`;
+            
+            // Abrir WhatsApp en una nueva ventana
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .swiper {
+            width: 100%;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+            width: 320px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            filter: blur(4px);
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .swiper-slide-active {
+            filter: blur(0px);
+        }
+        
+        .icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .icons i {
+            font-size: 24px;
+            color: #FF6B6B;
+        }
+        
+        .icons img {
+            width: 50px;
+            height: auto;
+        }
+        
+        .product-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .product-txt {
+            flex-basis: 50%;
+        }
+        
+        .product-txt span {
+            font-size: 18px;
+            color: #FF6B6B;
+            font-weight: bold;
+        }
+        
+        .product-txt h3 {
+            font-size: 24px;
+            color: #333;
+            margin: 10px 0;
+        }
+        
+        .product-txt p {
+            font-size: 14px;
+            color: #777;
+        }
+        
+        .product-img {
+            flex-basis: 40%;
+            text-align: center;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        
+        .btn-1 {
+            display: block;
+            text-align: center;
+            background-color: #FF6B6B;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-1:hover {
+            background-color: #FF5252;
+        }
