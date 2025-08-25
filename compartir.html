@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparte este enlace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #6e45e2, #852d91);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .link-box {
+            padding: 25px 20px;
+            text-align: center;
+            background-color: #f8f9fa;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            animation: slideUp 0.5s ease-out 0.3s both;
+        }
+        
+        .link-box p {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .link-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-align: center;
+            background-color: white;
+            color: #333;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(to right, #6e45e2, #852d91);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .copy-btn.copied {
+            background: linear-gradient(to right, #4caf50, #2e7d32);
+        }
+        
+        .share-section {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .share-section h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .share-section h2:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #6e45e2, #852d91);
+            border-radius: 3px;
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            animation: none;
+        }
+        
+        .whatsapp {
+            background: linear-gradient(to right, #25D366, #128C7E);
+        }
+        
+        .facebook {
+            background: linear-gradient(to right, #3b5998, #2d4373);
+        }
+        
+        .twitter {
+            background: linear-gradient(to right, #1DA1F2, #0d8bd9);
+        }
+        
+        .instagram {
+            background: linear-gradient(to right, #f09433, #bc1888);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            background-color: #f8f9fa;
+            margin-top: 10px;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .link-box {
+                margin: 15px;
+                padding: 20px 15px;
+            }
+            
+            .share-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>¡Comparte este enlace!</h1>
+            <p>Ayuda a difundir este contenido en tus redes sociales</p>
+        </div>
+        
+        <div class="link-box">
+            <p>Utiliza este enlace o compártelo directamente</p>
+            <input type="text" class="link-input" value="https://ejemplo.com/mi-enlace-especial" readonly>
+            <button class="copy-btn" id="copyButton">Copiar enlace</button>
+        </div>
+        
+        <div class="share-section">
+            <h2>Compartir en redes</h2>
+            <div class="share-buttons">
+                <a class="share-btn whatsapp" id="whatsappShare">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a class="share-btn facebook" id="facebookShare">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a class="share-btn twitter" id="twitterShare">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+                <a class="share-btn instagram" id="instagramShare">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 - Comparte contenido valioso con tu comunidad</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyButton = document.getElementById('copyButton');
+            const linkInput = document.querySelector('.link-input');
+            const currentUrl = window.location.href;
+            
+            // Establecer el enlace actual como valor del input
+            linkInput.value = currentUrl;
+            
+            // Función para copiar el enlace
+            copyButton.addEventListener('click', function() {
+                linkInput.select();
+                document.execCommand('copy');
+                
+                copyButton.textContent = '¡Enlace copiado!';
+                copyButton.classList.add('copied');
+                
+                setTimeout(function() {
+                    copyButton.textContent = 'Copiar enlace';
+                    copyButton.classList.remove('copied');
+                }, 2000);
+            });
+            
+            // Funciones para compartir
+            document.getElementById('whatsappShare').addEventListener('click', function() {
+                window.open(`https://wa.me/?text=${encodeURIComponent(currentUrl)}`, '_blank');
+            });
+            
+            document.getElementById('facebookShare').addEventListener('click', function() {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`, '_blank');
+            });
+            
+            document.getElementById('twitterShare').addEventListener('click', function() {
+                window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}`, '_blank');
+            });
+            
+            document.getElementById('instagramShare').addEventListener('click', function() {
+                alert('Para compartir en Instagram, copia el enlace y pégalo en tu perfil o historia');
+            });
+        });
+    </script>
+</body>
+</html>
