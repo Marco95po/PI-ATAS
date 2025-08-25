@@ -48,19 +48,23 @@
     </div>
 
     <!-- Modal de Información -->
-    <div id="infoModal" class="info-modal">
-        <div class="info-content">
-            <span class="info-close" id="infoClose">&times;</span>
-            <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
+<div id="infoModal" class="info-modal">
+    <div class="info-content">
+        <span class="info-close" id="infoClose">&times;</span>
+        <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
 
-            <p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
+        <p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
 
-            <p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
-
-            <p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
+        <p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
+        
+        <div class="gift-highlight">
+            <span class="gift-title"><span class="gift-icon">🎁</span>¡Sorpresa especial!</span>
+            Las piñatas que tienen el icono de regalo 🎁 incluyen un regalo sorpresa dentro de la piñata para el cumpleañero con un video de felicitaciones por tu cumpleaños.
         </div>
-    </div>
 
+        <p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
+    </div>
+</div>
     <p class="Title">PIÑATAS FIESTITA POP</p>
 
     <div class="swiper myswiper">
@@ -82,6 +86,30 @@
     <script>
         // Datos de las piñatas
         const pinatas = [
+            {
+                name: "SONIC",
+                price: "$85.00 MXN",
+                description: "Mini piñata *Sonic con la siguientes medidas(Alto 41cm x Ancho 19cm).",
+                image: "https://i.postimg.cc/fRYxWYv3/20250825-173621.png",
+                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
+                size: "mini"
+            },
+            {
+                name: "LA BELLA",
+                price: "$85.00 MXN",
+                description: "Mini piñata *La Bella con la siguientes medidas(Alto 45cm x Ancho 21cm).",
+                image: "https://i.postimg.cc/DZkHJr9t/20250825-173348.png",
+                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
+                size: "mini"
+            },
+            {
+                name: "LA BUBU",
+                price: "$120.00 MXN",
+                description: "Mini piñata *Labubu con la siguientes medidas(Alto 49cm x Ancho 26cm).",
+                image: "https://i.postimg.cc/Yq3n2KqK/20250825-173113.png",
+                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
+                size: "mini"
+            },
             {
                 name: "RENE",
                 price: "$100.00 MXN",
@@ -114,6 +142,7 @@
                 logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
                 size: "mini"
             }
+            
         ];
 
         // Variables globales
