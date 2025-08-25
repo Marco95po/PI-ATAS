@@ -2,7 +2,7 @@
             --primary: #9C27B0;       /* Morado principal */
             --secondary: #FFC107;     /* Amarillo */
             --accent: #FF9800;        /* Naranja */
-            --background: #FAF7F5;
+            --background: #221f1d;
             --surface: #FFFFFF;
             --text: #333333;
             --text-light: #777777;
@@ -189,9 +189,9 @@
         }
 
         .btn-2 {
-            background: transparent;
-            color: var(--text);
-            border: 2px solid #eeeeee;
+            background: linear-gradient(135deg, var(--primary), #7B1FA2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
         }
 
         .btn-2:hover {
