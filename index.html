@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <p class="Title"></p>
+    <p class="Title">PIÑATAS FIESTITA POP</p>
 
     <div class="swiper myswiper">
         <div class="swiper-wrapper">
@@ -34,6 +34,7 @@
                     </div>
                 </div>
                 <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Jack Skellington', '$89.00 MXN', 'Mini piñata de picacho especial para fiestas infantiles.')">Comprar</a>
+                <a href="#" class="btn-2" onclick="verDetalles('Jack Skellington', 'https://i.postimg.cc/VLnzrsFy/pngwing-com.png')">Ver detalles</a>
             </div>
 
             <!-- Slide 2 -->
@@ -54,6 +55,7 @@
                     </div>
                 </div>
                 <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+                <a href="#" class="btn-2" onclick="verDetalles('Piñata Especial', 'https://i.postimg.cc/qqM09232/pngwing-com-1.png')">Ver detalles</a>
             </div>
 
             <!-- Slide 3 -->
@@ -74,6 +76,7 @@
                     </div>
                 </div>
                 <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+                <a href="#" class="btn-2" onclick="verDetalles('Piñata Especial', 'https://i.postimg.cc/qqM09232/pngwing-com-1.png')">Ver detalles</a>
             </div>
 
             <!-- Slides adicionales con el mismo patrón -->
@@ -94,6 +97,7 @@
                     </div>
                 </div>
                 <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+                <a href="#" class="btn-2" onclick="verDetalles('Piñata Especial', 'https://i.postimg.cc/qqM09232/pngwing-com-1.png')">Ver detalles</a>
             </div>
 
             <div class="swiper-slide">
@@ -113,8 +117,18 @@
                     </div>
                 </div>
                 <a href="#" class="btn-1" onclick="comprarPorWhatsapp('Piñata Especial', '$89.00 MXN', 'Una piñata única y realmente original para tus fiestas.')">Comprar</a>
+                <a href="#" class="btn-2" onclick="verDetalles('Piñata Especial', 'https://i.postimg.cc/qqM09232/pngwing-com-1.png')">Ver detalles</a>
             </div>
         </div>
+        <!-- Add pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Modal para ver imagen con detalle -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="modal-caption" id="modalCaption"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -126,14 +140,21 @@
                 centeredSlides: true,
                 slidesPerView: "auto",
                 loop: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
                 coverflowEffect: {
-                    depth: 100, // Reducido para móvil
+                    depth: 100,
                     modifier: 1,
                     slideShadows: true,
                     rotate: 0,
                     stretch: 0,
                 }
             });
+            
+            // Agregar evento al botón de cerrar modal
+            document.querySelector('.modal-close').addEventListener('click', closeModal);
         });
 
         // Función para enviar mensaje por WhatsApp
@@ -150,6 +171,44 @@
             // Abrir WhatsApp en una nueva ventana
             window.open(url, '_blank');
         }
+
+        // Función para ver imagen con detalle
+        function verDetalles(nombre, imagenUrl) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const captionText = document.getElementById('modalCaption');
+            
+            modal.classList.add('active');
+            modalImg.src = imagenUrl;
+            captionText.innerHTML = nombre;
+            
+            // Evitar que el scroll del cuerpo principal se vea afectado
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            
+            // Restaurar el scroll del cuerpo
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cerrar modal al hacer clic fuera de la imagen
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Cerrar modal con la tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
