@@ -25,6 +25,38 @@
         </button>
     </div>
 
+    <!-- Menú Hamburguesa -->
+    <div class="hamburger-menu">
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="menu-items" id="menuItems">
+        <div class="close-menu" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </div>
+        <ul>
+            <li><a href="#" id="infoBtn">Información</a></li>
+        </ul>
+    </div>
+
+    <!-- Modal de Información -->
+    <div id="infoModal" class="info-modal">
+        <div class="info-content">
+            <span class="info-close" id="infoClose">&times;</span>
+            <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
+
+<p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
+
+<p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
+
+<p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
+        </div>
+    </div>
+
     <p class="Title">PIÑATAS FIESTITA POP</p>
 
     <div class="swiper myswiper">
@@ -47,41 +79,40 @@
         // Datos de las piñatas
         const pinatas = [
             {
-                name: "Pika chu",
-                price: "$89.00 MXN",
-                description: "Mini piñata de picacho especial para fiestas infantiles te pondras en contacto con nosotros por WhatsApp.",
-                image: "https://i.postimg.cc/VLnzrsFy/pngwing-com.png",
+                name: "RENE",
+                price: "$100.00 MXN",
+                description: "Mini piñata *Rene con la siguientes medidas(Alto 40cm x Ancho 25cm).",
+                image: "https://i.postimg.cc/wBpqmfqq/IMG-20250825-WA0005.png",
                 logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
             },
             {
-                name: "Piñata Especial",
-                price: "$89.00 MXN",
-                description: "Una piñata única y realmente original para tus fiestas.",
-                image: "https://i.postimg.cc/qqM09232/pngwing-com-1.png",
+                name: "MOANA",
+                price: "$85.00 MXN",
+                description: "Mini piñata *Moana (Alto 37cm x Ancho 18cm).",
+                image: "https://i.postimg.cc/yN8ZR8YY/IMG-20250825-WA0006.png",
                 logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
             },
             {
-                name: "Bombero",
-                price: "$89.00 MXN",
-                description: "Una piñata única y realmente original para tus fiestas.",
-                image: "https://i.postimg.cc/qqM09232/pngwing-com-1.png",
+                name: "WOODY",
+                price: "$90.00 MXN",
+                description: "Mini piñata *Woody (Alto 42.05cm x Ancho 26cm).",
+                image: "https://i.postimg.cc/SRd4dYyg/IMG-20250825-WA0007.png",
                 logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
             },
             {
-                name: "Princesa",
-                price: "$99.00 MXN",
-                description: "Piñata temática de princesa para cumpleaños de niñas.",
-                image: "https://i.postimg.cc/qqM09232/pngwing-com-1.png",
-                logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
-            },
-            {
-                name: "Superhéroe",
-                price: "$95.00 MXN",
-                description: "Piñata de superhéroe para fiestas infantiles temáticas.",
-                image: "https://i.postimg.cc/qqM09232/pngwing-com-1.png",
+                name: "FORZEN",
+                price: "$80.00 MXN",
+                description: "Mini piata *frozen (Alto 37cm x Ancho 20cm).",
+                image: "https://i.postimg.cc/0j2F8WsC/IMG-20250825-WA0008.png",
                 logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png"
             }
         ];
+
+        // Función para extraer el valor numérico del precio
+        function getPriceValue(priceString) {
+            // Eliminar el símbolo de moneda y cualquier texto, luego convertir a número
+            return parseFloat(priceString.replace(/[^\d.]/g, ''));
+        }
 
         // Función para mezclar array aleatoriamente (algoritmo Fisher-Yates)
         function shuffleArray(array) {
@@ -101,6 +132,10 @@
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
                 
+                // Determinar si el precio es mayor a $100
+                const priceValue = getPriceValue(pinata.price);
+                const showGift = priceValue > 100;
+                
                 slide.innerHTML = `
                     <div class="icons">
                         <i class="fa-solid fa-circle-arrow-left"></i>
@@ -109,7 +144,10 @@
                     </div>
                     <div class="product-content">
                         <div class="product-txt">
-                            <span>${pinata.price}</span>
+                            <div class="price-container">
+                                <span>${pinata.price}</span>
+                                ${showGift ? '<span class="gift-icon">🎁</span>' : ''}
+                            </div>
                             <h3>${pinata.name}</h3>
                             <p>${pinata.description}</p>
                         </div>
@@ -143,12 +181,74 @@
                 });
         }
 
+        // Funcionalidad del menú hamburguesa
+        function setupMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const menuItems = document.getElementById('menuItems');
+            const closeMenu = document.getElementById('closeMenu');
+            const infoBtn = document.getElementById('infoBtn');
+            const infoModal = document.getElementById('infoModal');
+            const infoClose = document.getElementById('infoClose');
+            
+            // Abrir menú
+            menuToggle.addEventListener('click', () => {
+                menuItems.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Cerrar menú
+            closeMenu.addEventListener('click', () => {
+                menuItems.classList.remove('active');
+                menuToggle.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Abrir modal de información
+            infoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuItems.classList.remove('active');
+                menuToggle.classList.remove('active');
+                infoModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Cerrar modal de información
+            infoClose.addEventListener('click', () => {
+                infoModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            infoModal.addEventListener('click', (e) => {
+                if (e.target === infoModal) {
+                    infoModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Cerrar menú al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                const isClickInsideMenu = menuItems.contains(e.target);
+                const isClickOnToggle = menuToggle.contains(e.target);
+                
+                if (!isClickInsideMenu && !isClickOnToggle && menuItems.classList.contains('active')) {
+                    menuItems.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Configurar evento para el botón de activar audio
             document.getElementById('audioActivator').addEventListener('click', iniciarAudio);
             
             // Intentar iniciar audio automáticamente
             iniciarAudio();
+            
+            // Configurar menú
+            setupMenu();
             
             // Generar slides aleatorios
             generateRandomSlides();
@@ -221,12 +321,31 @@
             if (event.target === modal) {
                 closeModal();
             }
+            
+            const infoModal = document.getElementById('infoModal');
+            if (event.target === infoModal) {
+                infoModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
         };
 
         // Cerrar modal con la tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeModal();
+                
+                const infoModal = document.getElementById('infoModal');
+                if (infoModal.classList.contains('active')) {
+                    infoModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+                
+                const menuItems = document.getElementById('menuItems');
+                if (menuItems.classList.contains('active')) {
+                    menuItems.classList.remove('active');
+                    document.getElementById('menuToggle').classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
             }
         });
     </script>
