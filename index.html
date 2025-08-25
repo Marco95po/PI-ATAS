@@ -12,6 +12,19 @@
 </head>
 
 <body>
+    <!-- Reproductor de audio oculto -->
+    <audio id="backgroundAudio" class="hidden-audio" loop>
+        <source src="https://www.dropbox.com/scl/fi/60vnyq2iy8pp2eukdsqoj/Intro.mp3?rlkey=kq8wwk61uw62ri40fp0ndchw6&st=b9ik8o7b&raw=1" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <!-- Overlay para activar audio -->
+    <div id="audioOverlay" class="audio-overlay">
+        <button id="audioActivator" class="audio-activator">
+            <i class="fas fa-volume-up"></i> BIENVENIDA
+        </button>
+    </div>
+
     <p class="Title">PIÑATAS FIESTITA POP</p>
 
     <div class="swiper myswiper">
@@ -34,7 +47,7 @@
         // Datos de las piñatas
         const pinatas = [
             {
-                name: "Jack Skellington",
+                name: "Pika chu",
                 price: "$89.00 MXN",
                 description: "Mini piñata de picacho especial para fiestas infantiles.",
                 image: "https://i.postimg.cc/VLnzrsFy/pngwing-com.png",
@@ -112,7 +125,31 @@
             });
         }
 
+        // Función para iniciar audio
+        function iniciarAudio() {
+            const backgroundAudio = document.getElementById('backgroundAudio');
+            const audioOverlay = document.getElementById('audioOverlay');
+            
+            // Intentar reproducir el audio
+            backgroundAudio.play()
+                .then(() => {
+                    // Ocultar el overlay si se reproduce correctamente
+                    audioOverlay.style.display = 'none';
+                })
+                .catch(error => {
+                    console.log('Error al reproducir audio:', error);
+                    // Mostrar el overlay si hay error
+                    audioOverlay.style.display = 'flex';
+                });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Configurar evento para el botón de activar audio
+            document.getElementById('audioActivator').addEventListener('click', iniciarAudio);
+            
+            // Intentar iniciar audio automáticamente
+            iniciarAudio();
+            
             // Generar slides aleatorios
             generateRandomSlides();
             
