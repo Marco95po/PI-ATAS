@@ -48,23 +48,24 @@
     </div>
 
     <!-- Modal de Información -->
-<div id="infoModal" class="info-modal">
-    <div class="info-content">
-        <span class="info-close" id="infoClose">&times;</span>
-        <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
+    <div id="infoModal" class="info-modal">
+        <div class="info-content">
+            <span class="info-close" id="infoClose">&times;</span>
+            <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
 
-        <p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
+            <p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
 
-        <p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
-        
-        <div class="gift-highlight">
-            <span class="gift-title"><span class="gift-icon">🎁</span>¡Sorpresa especial!</span>
-            Las piñatas que tienen el icono de regalo 🎁 incluyen un regalo sorpresa dentro de la piñata para el cumpleañero con un video de felicitaciones por tu cumpleaños.
+            <p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
+            
+            <div class="gift-highlight">
+                <span class="gift-title"><span class="gift-icon">🎁</span>¡Sorpresa especial!</span>
+                Las piñatas que tienen el icono de regalo 🎁 incluyen un regalo sorpresa dentro de la piñata para el cumpleañero con un video de felicitaciones por tu cumpleaños.
+            </div>
+
+            <p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
         </div>
-
-        <p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
     </div>
-</div>
+    
     <p class="Title">PIÑATAS FIESTITA POP</p>
 
     <div class="swiper myswiper">
@@ -78,7 +79,14 @@
     <!-- Modal para ver imagen con detalle -->
     <div id="imageModal" class="modal">
         <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImage">
+        <div class="modal-content-container">
+            <img class="modal-content" id="modalImage">
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoomIn">+</button>
+                <button class="zoom-btn" id="zoomOut">-</button>
+                <button class="zoom-btn" id="resetZoom">↺</button>
+            </div>
+        </div>
         <div class="modal-caption" id="modalCaption"></div>
     </div>
 
@@ -222,12 +230,19 @@
                 logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
                 size: "mini"
             }
-            
+            // Añade más piñatas según sea necesario
         ];
 
         // Variables globales
         let swiper;
         let currentFilter = 'all';
+        let isZoomed = false;
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+        let scale = 1;
+        let posX = 0;
+        let posY = 0;
+        let lastX, lastY;
 
         // Función para extraer el valor numérico del precio
         function getPriceValue(priceString) {
@@ -434,6 +449,158 @@
             });
         }
 
+        // Configurar funcionalidad de zoom y arrastre
+        function setupZoomAndDrag() {
+            const modalImg = document.getElementById('modalImage');
+            const modalContainer = document.querySelector('.modal-content-container');
+            const zoomInBtn = document.getElementById('zoomIn');
+            const zoomOutBtn = document.getElementById('zoomOut');
+            const resetZoomBtn = document.getElementById('resetZoom');
+            
+            // Doble clic para zoom
+            modalImg.addEventListener('dblclick', function(e) {
+                e.preventDefault();
+                if (scale === 1) {
+                    zoomIn();
+                } else {
+                    resetZoomFunction();
+                }
+            });
+            
+            // Botones de zoom
+            zoomInBtn.addEventListener('click', zoomIn);
+            zoomOutBtn.addEventListener('click', zoomOut);
+            resetZoomBtn.addEventListener('click', resetZoomFunction);
+            
+            // Funciones de zoom
+            function zoomIn() {
+                if (scale < 3) {
+                    scale += 0.5;
+                    updateZoom();
+                }
+            }
+            
+            function zoomOut() {
+                if (scale > 1) {
+                    scale -= 0.5;
+                    updateZoom();
+                }
+            }
+            
+            function resetZoomFunction() {
+                scale = 1;
+                posX = 0;
+                posY = 0;
+                updateZoom();
+            }
+            
+            function updateZoom() {
+                modalImg.style.transform = `scale(${scale}) translate(${posX}px, ${posY}px)`;
+                isZoomed = scale !== 1;
+                
+                if (isZoomed) {
+                    modalImg.classList.add('zoomed');
+                } else {
+                    modalImg.classList.remove('zoomed');
+                }
+            }
+            
+            // Funcionalidad de arrastre
+            modalImg.addEventListener('mousedown', startDrag);
+            modalImg.addEventListener('touchstart', startDragTouch);
+            
+            function startDrag(e) {
+                if (!isZoomed) return;
+                
+                e.preventDefault();
+                isDragging = true;
+                modalImg.classList.add('grabbing');
+                
+                startX = e.pageX - modalContainer.offsetLeft;
+                startY = e.pageY - modalContainer.offsetTop;
+                scrollLeft = posX;
+                scrollTop = posY;
+                
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', stopDrag);
+            }
+            
+            function startDragTouch(e) {
+                if (!isZoomed) return;
+                
+                e.preventDefault();
+                isDragging = true;
+                modalImg.classList.add('grabbing');
+                
+                const touch = e.touches[0];
+                startX = touch.pageX - modalContainer.offsetLeft;
+                startY = touch.pageY - modalContainer.offsetTop;
+                scrollLeft = posX;
+                scrollTop = posY;
+                
+                document.addEventListener('touchmove', onDragTouch);
+                document.addEventListener('touchend', stopDrag);
+            }
+            
+            function onDrag(e) {
+                if (!isDragging) return;
+                
+                e.preventDefault();
+                const x = e.pageX - modalContainer.offsetLeft;
+                const y = e.pageY - modalContainer.offsetTop;
+                const walkX = (x - startX) * 2;
+                const walkY = (y - startY) * 2;
+                
+                posX = scrollLeft + walkX;
+                posY = scrollTop + walkY;
+                
+                // Limitar el movimiento para evitar que la imagen se salga completamente de la vista
+                const maxX = (modalImg.width * scale - modalContainer.offsetWidth) / 2;
+                const maxY = (modalImg.height * scale - modalContainer.offsetHeight) / 2;
+                
+                if (scale > 1) {
+                    posX = Math.min(Math.max(posX, -maxX), maxX);
+                    posY = Math.min(Math.max(posY, -maxY), maxY);
+                }
+                
+                updateZoom();
+            }
+            
+            function onDragTouch(e) {
+                if (!isDragging) return;
+                
+                e.preventDefault();
+                const touch = e.touches[0];
+                const x = touch.pageX - modalContainer.offsetLeft;
+                const y = touch.pageY - modalContainer.offsetTop;
+                const walkX = (x - startX) * 2;
+                const walkY = (y - startY) * 2;
+                
+                posX = scrollLeft + walkX;
+                posY = scrollTop + walkY;
+                
+                // Limitar el movimiento para evitar que la imagen se salga completamente de la vista
+                const maxX = (modalImg.width * scale - modalContainer.offsetWidth) / 2;
+                const maxY = (modalImg.height * scale - modalContainer.offsetHeight) / 2;
+                
+                if (scale > 1) {
+                    posX = Math.min(Math.max(posX, -maxX), maxX);
+                    posY = Math.min(Math.max(posY, -maxY), maxY);
+                }
+                
+                updateZoom();
+            }
+            
+            function stopDrag() {
+                isDragging = false;
+                modalImg.classList.remove('grabbing');
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('touchmove', onDragTouch);
+                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('touchend', stopDrag);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Configurar evento para el botón de activar audio
             document.getElementById('audioActivator').addEventListener('click', iniciarAudio);
@@ -443,6 +610,9 @@
             
             // Configurar menú
             setupMenu();
+            
+            // Configurar zoom y arrastre
+            setupZoomAndDrag();
             
             // Generar slides iniciales
             generateSlides();
@@ -471,6 +641,13 @@
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
             const captionText = document.getElementById('modalCaption');
+            
+            // Resetear zoom y posición
+            scale = 1;
+            posX = 0;
+            posY = 0;
+            modalImg.style.transform = 'scale(1) translate(0, 0)';
+            modalImg.classList.remove('zoomed');
             
             modal.classList.add('active');
             modalImg.src = imagenUrl;
