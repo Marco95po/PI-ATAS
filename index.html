@@ -48,23 +48,24 @@
     </div>
 
     <!-- Modal de Información -->
-<div id="infoModal" class="info-modal">
-    <div class="info-content">
-        <span class="info-close" id="infoClose">&times;</span>
-        <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
+    <div id="infoModal" class="info-modal">
+        <div class="info-content">
+            <span class="info-close" id="infoClose">&times;</span>
+            <p>Bienvenido a <strong>PIÑATAS FIESTITA POP</strong>, tu tienda confiable de piñatas de alta calidad para todo tipo de celebraciones.</p>
 
-        <p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
+            <p>Contamos con una amplia variedad de diseños divertidos y coloridos que harán de tu fiesta un momento inolvidable.</p>
 
-        <p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
-        
-        <div class="gift-highlight">
-            <span class="gift-title"><span class="gift-icon">🎁</span>¡Sorpresa especial!</span>
-            Las piñatas que tienen el icono de regalo 🎁 incluyen un regalo sorpresa dentro de la piñata para el cumpleañero con un video de felicitaciones por tu cumpleaños.
+            <p>Todas nuestras piñatas están elaboradas con materiales resistentes y seguros, siguiendo los más altos estándares de calidad.</p>
+            
+            <div class="gift-highlight">
+                <span class="gift-title"><span class="gift-icon">🎁</span>¡Sorpresa especial!</span>
+                Las piñatas que tienen el icono de regalo 🎁 incluyen un regalo sorpresa dentro de la piñata para el cumpleañero con un video de felicitaciones por tu cumpleaños.
+            </div>
+
+            <p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
         </div>
-
-        <p>📲 ¡Atendemos con gusto todas tus dudas y pedidos a través de WhatsApp!</p>
     </div>
-</div>
+    
     <p class="Title">PIÑATAS FIESTITA POP</p>
 
     <div class="swiper myswiper">
@@ -78,7 +79,14 @@
     <!-- Modal para ver imagen con detalle -->
     <div id="imageModal" class="modal">
         <span class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImage">
+        <div class="modal-content-container">
+            <img class="modal-content" id="modalImage">
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoomInBtn">+</button>
+                <button class="zoom-btn" id="zoomOutBtn">-</button>
+                <button class="zoom-btn" id="resetZoomBtn">↺</button>
+            </div>
+        </div>
         <div class="modal-caption" id="modalCaption"></div>
     </div>
 
@@ -222,12 +230,14 @@
                 logo: "https://i.postimg.cc/vmQTp58h/file-000000004e1461f79e035d00223adff0.png",
                 size: "mini"
             }
-            
         ];
 
         // Variables globales
         let swiper;
         let currentFilter = 'all';
+        let currentScale = 1;
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
 
         // Función para extraer el valor numérico del precio
         function getPriceValue(priceString) {
@@ -434,6 +444,109 @@
             });
         }
 
+        // Configurar funcionalidad de zoom para la imagen
+        function setupZoom() {
+            const modalImg = document.getElementById('modalImage');
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const resetZoomBtn = document.getElementById('resetZoomBtn');
+            
+            // Eventos para los botones de zoom
+            zoomInBtn.addEventListener('click', () => {
+                currentScale += 0.5;
+                modalImg.style.transform = `scale(${currentScale})`;
+                modalImg.classList.add('zoomed');
+            });
+            
+            zoomOutBtn.addEventListener('click', () => {
+                if (currentScale > 1) {
+                    currentScale -= 0.5;
+                    modalImg.style.transform = `scale(${currentScale})`;
+                    if (currentScale <= 1) {
+                        modalImg.classList.remove('zoomed');
+                    }
+                }
+            });
+            
+            resetZoomBtn.addEventListener('click', () => {
+                currentScale = 1;
+                modalImg.style.transform = 'scale(1)';
+                modalImg.classList.remove('zoomed');
+            });
+            
+            // Zoom con gestos táctiles (pinch to zoom)
+            let initialDistance = null;
+            
+            modalImg.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    initialDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            });
+            
+            modalImg.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const currentDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    
+                    if (initialDistance !== null) {
+                        const scaleFactor = currentDistance / initialDistance;
+                        const newScale = Math.max(1, currentScale * scaleFactor);
+                        
+                        if (newScale > 1.1) {
+                            modalImg.style.transform = `scale(${newScale})`;
+                            modalImg.classList.add('zoomed');
+                        }
+                    }
+                    
+                    initialDistance = currentDistance;
+                }
+            });
+            
+            modalImg.addEventListener('touchend', function() {
+                initialDistance = null;
+            });
+            
+            // Permitir arrastrar la imagen cuando está zoomada
+            modalImg.addEventListener('mousedown', (e) => {
+                if (currentScale > 1) {
+                    isDragging = true;
+                    startX = e.pageX - modalImg.offsetLeft;
+                    startY = e.pageY - modalImg.offsetTop;
+                    scrollLeft = modalImg.scrollLeft;
+                    scrollTop = modalImg.scrollTop;
+                    modalImg.style.cursor = 'grabbing';
+                }
+            });
+            
+            modalImg.addEventListener('mouseleave', () => {
+                isDragging = false;
+                modalImg.style.cursor = 'grab';
+            });
+            
+            modalImg.addEventListener('mouseup', () => {
+                isDragging = false;
+                modalImg.style.cursor = 'grab';
+            });
+            
+            modalImg.addEventListener('mousemove', (e) => {
+                if (!isDragging || currentScale <= 1) return;
+                e.preventDefault();
+                const x = e.pageX - modalImg.offsetLeft;
+                const y = e.pageY - modalImg.offsetTop;
+                const walkX = (x - startX) * 2;
+                const walkY = (y - startY) * 2;
+                modalImg.scrollLeft = scrollLeft - walkX;
+                modalImg.scrollTop = scrollTop - walkY;
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Configurar evento para el botón de activar audio
             document.getElementById('audioActivator').addEventListener('click', iniciarAudio);
@@ -443,6 +556,9 @@
             
             // Configurar menú
             setupMenu();
+            
+            // Configurar funcionalidad de zoom
+            setupZoom();
             
             // Generar slides iniciales
             generateSlides();
@@ -471,6 +587,11 @@
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
             const captionText = document.getElementById('modalCaption');
+            
+            // Resetear el zoom al abrir una nueva imagen
+            currentScale = 1;
+            modalImg.style.transform = 'scale(1)';
+            modalImg.classList.remove('zoomed');
             
             modal.classList.add('active');
             modalImg.src = imagenUrl;
