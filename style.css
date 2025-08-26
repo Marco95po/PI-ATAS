@@ -351,6 +351,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .modal.active {
@@ -373,13 +374,33 @@
             color: var(--primary);
         }
 
-        .modal-content {
+        .modal-content-container {
+            position: relative;
+            overflow: hidden;
             max-width: 90%;
             max-height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             border-radius: var(--radius-sm);
-            transform: scale(0.9);
+            transform: scale(1);
             transition: transform 0.3s ease;
+            cursor: grab;
+        }
+
+        .modal-content.zoomed {
+            cursor: grab;
+            transform: scale(2);
+        }
+
+        .modal-content.grabbing {
+            cursor: grabbing;
         }
 
         .modal.active .modal-content {
@@ -393,6 +414,34 @@
             text-align: center;
             padding: 0 20px;
             max-width: 600px;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1002;
+        }
+
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .zoom-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         /* Info Modal */
@@ -452,6 +501,25 @@
         .info-content p {
             margin-bottom: 15px;
             line-height: 1.6;
+        }
+
+        .gift-highlight {
+            background: rgba(255, 193, 7, 0.1);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .gift-title {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .gift-icon {
+            margin-right: 5px;
         }
 
         /* Swiper customizations */
@@ -550,6 +618,17 @@
             
             .menu-items.active {
                 left: 0;
+            }
+            
+            .zoom-controls {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .zoom-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
             }
         }
 
