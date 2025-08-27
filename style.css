@@ -1,11 +1,11 @@
 :root {
-            --primary: #9C27B0;       /* Morado principal */
-            --secondary: #FFC107;     /* Amarillo */
-            --accent: #FF9800;        /* Naranja */
-            --background: #221f1d;
+            --primary: #FF6B8B;       /* Rosa vibrante */
+            --secondary: #4ECDC4;     /* Turquesa alegre */
+            --accent: #FFE66D;        /* Amarillo soleado */
+            --background: #1A1A2E;    /* Azul oscuro elegante */
             --surface: #FFFFFF;
-            --text: #e6e2e2;
-            --text-light: #140f0f;
+            --text: #F0F0F0;
+            --text-light: #2D3047;
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
@@ -30,8 +30,48 @@
             align-items: center;
             justify-content: center;
             background-image: 
-                radial-gradient(at 81% 39%, rgba(156, 39, 176, 0.15) 0, transparent 50%),
-                radial-gradient(at 11% 82%, rgba(255, 193, 7, 0.15) 0, transparent 50%);
+                radial-gradient(at 81% 39%, rgba(255, 107, 139, 0.15) 0, transparent 50%),
+                radial-gradient(at 11% 82%, rgba(78, 205, 196, 0.15) 0, transparent 50%);
+            animation: changeColors 30s infinite alternate;
+        }
+
+        @keyframes changeColors {
+            0% {
+                --primary: #FF6B8B;
+                --secondary: #4ECDC4;
+                --accent: #FFE66D;
+                --background: #1A1A2E;
+            }
+            20% {
+                --primary: #FF9A8B;
+                --secondary: #6A7FDB;
+                --accent: #FFD166;
+                --background: #162447;
+            }
+            40% {
+                --primary: #9CEC5B;
+                --secondary: #FF5E5B;
+                --accent: #00C9B1;
+                --background: #1E2A3A;
+            }
+            60% {
+                --primary: #FF61D2;
+                --secondary: #FEFFAB;
+                --accent: #B967FF;
+                --background: #231F20;
+            }
+            80% {
+                --primary: #00DDFF;
+                --secondary: #FF57B4;
+                --accent: #A3F7BF;
+                --background: #0F3460;
+            }
+            100% {
+                --primary: #FFCA61;
+                --secondary: #7B68EE;
+                --accent: #FF7C7C;
+                --background: #2C2C54;
+            }
         }
 
         /* Menú Hamburguesa - LADO IZQUIERDO */
@@ -131,7 +171,7 @@
         }
 
         .menu-items a:hover {
-            background: rgba(156, 39, 176, 0.2);
+            background: rgba(255, 107, 139, 0.2);
             transform: translateX(5px);
         }
 
@@ -147,6 +187,130 @@
 
         .close-menu:hover {
             color: var(--primary);
+        }
+
+        /* Modal de búsqueda */
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1004;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .search-content {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 500px;
+            color: var(--text-light);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .search-close:hover {
+            color: var(--primary);
+        }
+
+        .search-input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .search-result-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-result-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .go-to-all-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), #E84A7F);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .go-to-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 139, 0.4);
         }
 
         .Title {
@@ -315,24 +479,25 @@
         }
 
         .btn-1 {
-            background: linear-gradient(135deg, var(--primary), #7B1FA2);
+            background: linear-gradient(135deg, var(--primary), #E84A7F);
             color: white;
-            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 107, 139, 0.3);
         }
 
         .btn-1:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 107, 139, 0.4);
         }
 
         .btn-2 {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #E84A7F);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 139, 0.3);
         }
 
         .btn-2:hover {
-            background: rgba(156, 39, 176, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 139, 0.4);
         }
 
         /* Modal Styles */
@@ -504,11 +669,11 @@
         }
 
         .gift-highlight {
-            background: rgba(255, 193, 7, 0.1);
+            background: rgba(255, 230, 109, 0.1);
             padding: 15px;
             border-radius: var(--radius-md);
             margin: 20px 0;
-            border-left: 4px solid var(--secondary);
+            border-left: 4px solid var(--accent);
         }
 
         .gift-title {
