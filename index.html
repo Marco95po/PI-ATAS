@@ -40,11 +40,27 @@
         </div>
         <ul>
             <li><a href="#" id="infoBtn">Información</a></li>
+            <li><a href="#" id="searchBtn">Buscar piñata</a></li>
             <li><a href="#" id="miniBtn">Mini</a></li>
             <li><a href="#" id="grandeBtn">Grande</a></li>
             <li><a href="#" id="todasBtn">Todas</a></li>
             <li><a href="compartir.html" id="compartirBtn">Compartir</a></li>
         </ul>
+    </div>
+
+    <!-- Modal de Búsqueda -->
+    <div id="searchModal" class="search-modal">
+        <div class="search-content">
+            <span class="search-close" id="searchClose">&times;</span>
+            <h2>Buscar Piñata</h2>
+            <div class="search-input-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Escribe el nombre de la piñata...">
+            </div>
+            <div class="search-results" id="searchResults">
+                <!-- Los resultados de búsqueda se mostrarán aquí -->
+            </div>
+        </div>
     </div>
 
     <!-- Modal de Información -->
@@ -339,6 +355,93 @@
             });
         }
 
+        // Función para buscar piñatas
+        function searchPinatas(query) {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+            
+            if (!query.trim()) {
+                resultsContainer.innerHTML = '<div class="no-results">Escribe el nombre de una piñata para buscar</div>';
+                return;
+            }
+            
+            const filteredPinatas = pinatas.filter(pinata => 
+                pinata.name.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (filteredPinatas.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <p>¡Lo sentimos! No encontramos "${query}"</p>
+                        <p>Estamos creando esta piñata especialmente para ti</p>
+                        <a href="#" class="go-to-all-btn" id="goToAllBtn">Ver todas las piñatas</a>
+                    </div>
+                `;
+                
+                // Agregar evento al botón "Ir a Todas"
+                document.getElementById('goToAllBtn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeSearchModal();
+                    currentFilter = 'all';
+                    generateSlides();
+                });
+            } else {
+                filteredPinatas.forEach(pinata => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    resultItem.innerHTML = `
+                        <h4>${pinata.name}</h4>
+                        <p>${pinata.price} - ${pinata.size}</p>
+                    `;
+                    
+                    resultItem.addEventListener('click', function() {
+                        closeSearchModal();
+                        // Filtrar para mostrar solo esta piñata
+                        currentFilter = 'all';
+                        generateSlides();
+                        
+                        // Encontrar el índice de la piñata seleccionada
+                        const allPinatas = filterPinatasBySize('all');
+                        const pinataIndex = allPinatas.findIndex(p => p.name === pinata.name);
+                        
+                        if (pinataIndex !== -1 && swiper) {
+                            // Desplazar el swiper a la piñata seleccionada
+                            swiper.slideTo(pinataIndex);
+                        }
+                    });
+                    
+                    resultsContainer.appendChild(resultItem);
+                });
+            }
+        }
+
+        // Función para abrir el modal de búsqueda
+        function openSearchModal() {
+            const searchModal = document.getElementById('searchModal');
+            const searchInput = document.getElementById('searchInput');
+            
+            searchModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Enfocar el campo de búsqueda después de un pequeño retraso
+            setTimeout(() => {
+                searchInput.focus();
+            }, 300);
+            
+            // Mostrar mensaje inicial
+            document.getElementById('searchResults').innerHTML = '<div class="no-results">Escribe el nombre de una piñata para buscar</div>';
+        }
+
+        // Función para cerrar el modal de búsqueda
+        function closeSearchModal() {
+            const searchModal = document.getElementById('searchModal');
+            searchModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Limpiar campo de búsqueda
+            document.getElementById('searchInput').value = '';
+        }
+
         // Función para iniciar audio
         function iniciarAudio() {
             const backgroundAudio = document.getElementById('backgroundAudio');
@@ -363,11 +466,15 @@
             const menuItems = document.getElementById('menuItems');
             const closeMenu = document.getElementById('closeMenu');
             const infoBtn = document.getElementById('infoBtn');
+            const searchBtn = document.getElementById('searchBtn');
             const miniBtn = document.getElementById('miniBtn');
             const grandeBtn = document.getElementById('grandeBtn');
             const todasBtn = document.getElementById('todasBtn');
             const infoModal = document.getElementById('infoModal');
             const infoClose = document.getElementById('infoClose');
+            const searchModal = document.getElementById('searchModal');
+            const searchClose = document.getElementById('searchClose');
+            const searchInput = document.getElementById('searchInput');
             
             // Abrir menú
             menuToggle.addEventListener('click', () => {
@@ -390,6 +497,14 @@
                 menuToggle.classList.remove('active');
                 infoModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
+            });
+            
+            // Abrir modal de búsqueda
+            searchBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuItems.classList.remove('active');
+                menuToggle.classList.remove('active');
+                openSearchModal();
             });
             
             // Filtrar por Mini
@@ -428,11 +543,27 @@
                 document.body.style.overflow = 'auto';
             });
             
+            // Cerrar modal de búsqueda
+            searchClose.addEventListener('click', () => {
+                closeSearchModal();
+            });
+            
+            // Buscar al escribir en el campo de búsqueda
+            searchInput.addEventListener('input', (e) => {
+                searchPinatas(e.target.value);
+            });
+            
             // Cerrar modal al hacer clic fuera
             infoModal.addEventListener('click', (e) => {
                 if (e.target === infoModal) {
                     infoModal.classList.remove('active');
                     document.body.style.overflow = 'auto';
+                }
+            });
+            
+            searchModal.addEventListener('click', (e) => {
+                if (e.target === searchModal) {
+                    closeSearchModal();
                 }
             });
             
@@ -678,6 +809,11 @@
                 infoModal.classList.remove('active');
                 document.body.style.overflow = 'auto';
             }
+            
+            const searchModal = document.getElementById('searchModal');
+            if (event.target === searchModal) {
+                closeSearchModal();
+            }
         };
 
         // Cerrar modal con la tecla ESC
@@ -689,6 +825,11 @@
                 if (infoModal.classList.contains('active')) {
                     infoModal.classList.remove('active');
                     document.body.style.overflow = 'auto';
+                }
+                
+                const searchModal = document.getElementById('searchModal');
+                if (searchModal.classList.contains('active')) {
+                    closeSearchModal();
                 }
                 
                 const menuItems = document.getElementById('menuItems');
