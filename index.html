@@ -53,12 +53,14 @@
         <div class="search-content">
             <span class="search-close" id="searchClose">&times;</span>
             <h2>Buscar Piñata</h2>
-            <div class="search-input-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Escribe el nombre de la piñata...">
+            <input type="text" id="searchInput" class="search-input" placeholder="Escribe el nombre de la piñata...">
+            <div id="searchResults" class="search-results">
+                <!-- Los resultados de búsqueda aparecerán aquí -->
             </div>
-            <div class="search-results" id="searchResults">
-                <!-- Los resultados de búsqueda se mostrarán aquí -->
+            <div id="noResults" class="no-results" style="display: none;">
+                <h3>¡Lo sentimos!</h3>
+                <p>No encontramos la piñata que buscas, pero estamos creando una especialmente para ti.</p>
+                <button class="go-to-all-btn" id="goToAllBtn">Ir a Todas</button>
             </div>
         </div>
     </div>
@@ -355,93 +357,6 @@
             });
         }
 
-        // Función para buscar piñatas
-        function searchPinatas(query) {
-            const resultsContainer = document.getElementById('searchResults');
-            resultsContainer.innerHTML = '';
-            
-            if (!query.trim()) {
-                resultsContainer.innerHTML = '<div class="no-results">Escribe el nombre de una piñata para buscar</div>';
-                return;
-            }
-            
-            const filteredPinatas = pinatas.filter(pinata => 
-                pinata.name.toLowerCase().includes(query.toLowerCase())
-            );
-            
-            if (filteredPinatas.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div class="no-results">
-                        <p>¡Lo sentimos! No encontramos "${query}"</p>
-                        <p>Estamos creando esta piñata especialmente para ti</p>
-                        <a href="#" class="go-to-all-btn" id="goToAllBtn">Ver todas las piñatas</a>
-                    </div>
-                `;
-                
-                // Agregar evento al botón "Ir a Todas"
-                document.getElementById('goToAllBtn').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    closeSearchModal();
-                    currentFilter = 'all';
-                    generateSlides();
-                });
-            } else {
-                filteredPinatas.forEach(pinata => {
-                    const resultItem = document.createElement('div');
-                    resultItem.className = 'search-result-item';
-                    resultItem.innerHTML = `
-                        <h4>${pinata.name}</h4>
-                        <p>${pinata.price} - ${pinata.size}</p>
-                    `;
-                    
-                    resultItem.addEventListener('click', function() {
-                        closeSearchModal();
-                        // Filtrar para mostrar solo esta piñata
-                        currentFilter = 'all';
-                        generateSlides();
-                        
-                        // Encontrar el índice de la piñata seleccionada
-                        const allPinatas = filterPinatasBySize('all');
-                        const pinataIndex = allPinatas.findIndex(p => p.name === pinata.name);
-                        
-                        if (pinataIndex !== -1 && swiper) {
-                            // Desplazar el swiper a la piñata seleccionada
-                            swiper.slideTo(pinataIndex);
-                        }
-                    });
-                    
-                    resultsContainer.appendChild(resultItem);
-                });
-            }
-        }
-
-        // Función para abrir el modal de búsqueda
-        function openSearchModal() {
-            const searchModal = document.getElementById('searchModal');
-            const searchInput = document.getElementById('searchInput');
-            
-            searchModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            // Enfocar el campo de búsqueda después de un pequeño retraso
-            setTimeout(() => {
-                searchInput.focus();
-            }, 300);
-            
-            // Mostrar mensaje inicial
-            document.getElementById('searchResults').innerHTML = '<div class="no-results">Escribe el nombre de una piñata para buscar</div>';
-        }
-
-        // Función para cerrar el modal de búsqueda
-        function closeSearchModal() {
-            const searchModal = document.getElementById('searchModal');
-            searchModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            
-            // Limpiar campo de búsqueda
-            document.getElementById('searchInput').value = '';
-        }
-
         // Función para iniciar audio
         function iniciarAudio() {
             const backgroundAudio = document.getElementById('backgroundAudio');
@@ -460,21 +375,154 @@
                 });
         }
 
+        // Función para buscar piñatas
+        function searchPinatas(query) {
+            if (!query.trim()) return [];
+            
+            const searchTerm = query.toLowerCase().trim();
+            return pinatas.filter(pinata => 
+                pinata.name.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        // Función para mostrar resultados de búsqueda
+        function displaySearchResults(results) {
+            const resultsContainer = document.getElementById('searchResults');
+            const noResults = document.getElementById('noResults');
+            
+            resultsContainer.innerHTML = '';
+            
+            if (results.length === 0) {
+                noResults.style.display = 'block';
+                resultsContainer.style.display = 'none';
+            } else {
+                noResults.style.display = 'none';
+                resultsContainer.style.display = 'block';
+                
+                results.forEach(pinata => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    resultItem.innerHTML = `
+                        <h3>${pinata.name}</h3>
+                        <p>${pinata.price} - ${pinata.description}</p>
+                    `;
+                    
+                    resultItem.addEventListener('click', () => {
+                        // Cerrar modal de búsqueda
+                        document.getElementById('searchModal').classList.remove('active');
+                        document.body.style.overflow = 'auto';
+                        
+                        // Filtrar y mostrar solo esta piñata
+                        currentFilter = 'search';
+                        const slidesContainer = document.getElementById('slides-container');
+                        slidesContainer.innerHTML = '';
+                        
+                        const slide = document.createElement('div');
+                        slide.className = 'swiper-slide';
+                        
+                        const priceValue = getPriceValue(pinata.price);
+                        const showGift = priceValue > 100;
+                        
+                        slide.innerHTML = `
+                            <div class="icons">
+                                <i class="fa-solid fa-circle-arrow-left"></i>
+                                <img src="${pinata.logo}" alt="Logo">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-txt">
+                                    <div class="price-container">
+                                        <span>${pinata.price}</span>
+                                        ${showGift ? '<span class="gift-icon">🎁</span>' : ''}
+                                    </div>
+                                    <h3>${pinata.name}</h3>
+                                    <p>${pinata.description}</p>
+                                </div>
+                                <div class="product-img">
+                                    <img src="${pinata.image}" alt="${pinata.name}">
+                                </div>
+                            </div>
+                            <a href="#" class="btn-1" onclick="comprarPorWhatsapp('${pinata.name}', '${pinata.price}', '${pinata.description}')">🛒 Comprar</a>
+                            <a href="#" class="btn-2" onclick="verDetalles('${pinata.name}', '${pinata.image}')">Ver detalles</a>
+                        `;
+                        
+                        slidesContainer.appendChild(slide);
+                        
+                        // Reiniciar Swiper
+                        if (swiper) {
+                            swiper.destroy(true, true);
+                        }
+                        
+                        initSwiper();
+                    });
+                    
+                    resultsContainer.appendChild(resultItem);
+                });
+            }
+        }
+
+        // Configurar funcionalidad de búsqueda
+        function setupSearch() {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchModal = document.getElementById('searchModal');
+            const searchClose = document.getElementById('searchClose');
+            const searchInput = document.getElementById('searchInput');
+            const goToAllBtn = document.getElementById('goToAllBtn');
+            
+            // Abrir modal de búsqueda
+            searchBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                menuItems.classList.remove('active');
+                menuToggle.classList.remove('active');
+                searchModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Enfocar el input
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            });
+            
+            // Cerrar modal de búsqueda
+            searchClose.addEventListener('click', () => {
+                searchModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            searchModal.addEventListener('click', (e) => {
+                if (e.target === searchModal) {
+                    searchModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Buscar al escribir
+            searchInput.addEventListener('input', (e) => {
+                const results = searchPinatas(e.target.value);
+                displaySearchResults(results);
+            });
+            
+            // Ir a todas las piñatas
+            goToAllBtn.addEventListener('click', () => {
+                searchModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                currentFilter = 'all';
+                generateSlides();
+            });
+        }
+
         // Funcionalidad del menú hamburguesa
         function setupMenu() {
             const menuToggle = document.getElementById('menuToggle');
             const menuItems = document.getElementById('menuItems');
             const closeMenu = document.getElementById('closeMenu');
             const infoBtn = document.getElementById('infoBtn');
-            const searchBtn = document.getElementById('searchBtn');
             const miniBtn = document.getElementById('miniBtn');
             const grandeBtn = document.getElementById('grandeBtn');
             const todasBtn = document.getElementById('todasBtn');
             const infoModal = document.getElementById('infoModal');
             const infoClose = document.getElementById('infoClose');
-            const searchModal = document.getElementById('searchModal');
-            const searchClose = document.getElementById('searchClose');
-            const searchInput = document.getElementById('searchInput');
             
             // Abrir menú
             menuToggle.addEventListener('click', () => {
@@ -497,14 +545,6 @@
                 menuToggle.classList.remove('active');
                 infoModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
-            });
-            
-            // Abrir modal de búsqueda
-            searchBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                menuItems.classList.remove('active');
-                menuToggle.classList.remove('active');
-                openSearchModal();
             });
             
             // Filtrar por Mini
@@ -543,27 +583,11 @@
                 document.body.style.overflow = 'auto';
             });
             
-            // Cerrar modal de búsqueda
-            searchClose.addEventListener('click', () => {
-                closeSearchModal();
-            });
-            
-            // Buscar al escribir en el campo de búsqueda
-            searchInput.addEventListener('input', (e) => {
-                searchPinatas(e.target.value);
-            });
-            
             // Cerrar modal al hacer clic fuera
             infoModal.addEventListener('click', (e) => {
                 if (e.target === infoModal) {
                     infoModal.classList.remove('active');
                     document.body.style.overflow = 'auto';
-                }
-            });
-            
-            searchModal.addEventListener('click', (e) => {
-                if (e.target === searchModal) {
-                    closeSearchModal();
                 }
             });
             
@@ -742,6 +766,9 @@
             // Configurar menú
             setupMenu();
             
+            // Configurar búsqueda
+            setupSearch();
+            
             // Configurar zoom y arrastre
             setupZoomAndDrag();
             
@@ -812,7 +839,8 @@
             
             const searchModal = document.getElementById('searchModal');
             if (event.target === searchModal) {
-                closeSearchModal();
+                searchModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
             }
         };
 
@@ -829,7 +857,8 @@
                 
                 const searchModal = document.getElementById('searchModal');
                 if (searchModal.classList.contains('active')) {
-                    closeSearchModal();
+                    searchModal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
                 }
                 
                 const menuItems = document.getElementById('menuItems');
