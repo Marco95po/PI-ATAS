@@ -176,6 +176,35 @@
             color: rgba(255,255,255,0.9);
         }
         
+        /* Botón flotante */
+        .btn-flotante {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 999;
+            text-decoration: none;
+        }
+        
+        .btn-flotante:hover {
+            transform: scale(1.1) translateY(-5px);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
         @media (max-width: 768px) {
             .galeria {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -193,6 +222,14 @@
             .btn {
                 width: 100%;
                 text-align: center;
+            }
+            
+            .btn-flotante {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
             }
         }
     </style>
@@ -221,6 +258,9 @@
             </div>
         </div>
     </div>
+    
+    <!-- Botón flotante para volver al index -->
+    <a href="index.html" class="btn-flotante">←</a>
 
     <script>
         // Datos de las imágenes
@@ -229,19 +269,19 @@
                 principal: "https://i.postimg.cc/TPxNVyVh/file-00000000323c61f5b11244423e73df7d.png",
                 secundaria: "https://i.postimg.cc/kgBJMqvG/20250829-174913.png",
                 titulo: "LA GRANJA DE ZENON",
-                descripcion: "Hermoso paisaje con montañas y un lago cristalino."
+                descripcion: ""
             },
             {
                 principal: "https://i.postimg.cc/YS4NmMVj/file-000000007c10622f8bbaa6504d6fd1a6.png",
                 secundaria: "https://i.postimg.cc/fRYxWYv3/20250825-173621.png",
                 titulo: "SONIC",
-                descripcion: "Vista panorámica de una ciudad con rascacielos."
+                descripcion: ""
             },
             {
                 principal: "https://i.postimg.cc/9Xy67h5x/file-00000000d544622f985530ecd9f2c033.png",
                 secundaria: "https://i.postimg.cc/65chCrvD/20250825-182203.png",
                 titulo: "MASHA Y EL OSO",
-                descripcion: "Hermoso atardecer con colores vibrantes sobre el mar."
+                descripcion: ""
             },
         ];
         
